@@ -1,0 +1,39 @@
+[tool.ruff]
+# Активируем ВСЕ правила
+fixable = ["ALL"]
+select = ["ALL"]
+
+# Игнорируем только спорные/неактуальные правила
+ignore = [
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D107",
+    "D203",
+    "D212",
+    "RUF001",
+    "RUF002",
+    "COM812",
+    "FA102",
+    "DTZ007",
+    "FIX002",
+    "TD004",
+    "TD003",
+    "E501", # line to long
+    "INP001", # file ... is part of an implict namespace package
+]
+
+[tool.ruff.per-file-ignores]
+"**/tests/*" = [
+    "S101", # use of assert detected
+    "SIM117", # with statement with multiple contexts
+]
+"allure.pyi" = ["PYI001"]  # Name of private `TypeVar` must start with `_` for stub file
+
+
+
+[tool.mypy]
+strict = true  # Активируем все проверки
