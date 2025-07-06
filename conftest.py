@@ -34,6 +34,8 @@ def browser(request: FixtureRequest) -> Generator[webdriver.Chrome | webdriver.E
                 "credentials_enable_service": False,  # Отключает сервис сохранения паролей
                 "profile.password_manager_enabled": False  # Отключает встроенный менеджер паролей
             })
+            options.add_argument("--disable-save-password-bubble")
+            options.add_argument("--disable-features=PasswordReveal")
             driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()), options=options)
         elif browser_name == "chrome":
             driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))

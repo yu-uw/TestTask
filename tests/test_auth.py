@@ -1,10 +1,9 @@
 import allure
 import pytest
-from selenium.webdriver.remote.webdriver import WebDriver
 
+from selenium.webdriver.remote.webdriver import WebDriver
 from pages.auth_page import AuthPage
 from pages.main_page import MainPage
-from utils.screenshots import take_screenshot
 
 @pytest.fixture(scope='function')
 def auth_page(browser) -> AuthPage:
@@ -21,20 +20,17 @@ class TestAuthorization:
         - Открыта страница с товарами
         - Отображается заголовок 'Products'.
         """
+
         auth_page.open(base_url)
 
         with allure.step("Вводим логин и пароль"):
             auth_page.username_input("standard_user")
-            take_screenshot(browser, "Заполнен логин")
-
             auth_page.password_input("secret_sauce")
-            take_screenshot(browser, "Заполнен пароль")
 
         auth_page.login_button_click()
-        take_screenshot(browser, "Успешный клик по кнопке логина")
 
         main_page = MainPage(browser)
-        with allure.step("ОР:"):
-            with allure.step("Отображается страница товаров"):
-                assert "inventory" in browser.current_url, "Не произошел переход на страницу товаров"
-                assert main_page.get_products_title() == "Products", "Некорректный заголовок страницы"
+
+        with allure.step("Отображается страница товаров"):
+            assert "inventory" in browser.current_url, "Не произошел переход на страницу товаров"
+            assert main_page.get_products_title() == "Products", "Некорректный заголовок страницы"
