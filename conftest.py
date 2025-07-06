@@ -1,4 +1,5 @@
 import sys
+from typing import Generator
 
 import psutil
 import pytest
@@ -10,8 +11,6 @@ from selenium.webdriver.edge.service import Service as EdgeService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
-
-
 def pytest_addoption(parser: Parser) -> None:
     parser.addoption(
         "--browser",
@@ -22,9 +21,9 @@ def pytest_addoption(parser: Parser) -> None:
 
 
 @pytest.fixture
-def browser(request: FixtureRequest) -> None:
+def browser(request: FixtureRequest) -> Generator[webdriver.Chrome | webdriver.Edge, None, None]:
     browser_name = request.config.getoption("--browser").lower()
-    driver = None
+    driver: webdriver.Chrome | webdriver.Edge | None = None
 
     try:
         if browser_name == "edge":
@@ -38,7 +37,8 @@ def browser(request: FixtureRequest) -> None:
             driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()), options=options)
         elif browser_name == "chrome":
             driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-
+        if not driver:
+            pytest.exit(reason='driver is shit')
         driver.maximize_window()
         yield driver
 
