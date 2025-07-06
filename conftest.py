@@ -11,6 +11,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 
 
+
 def pytest_addoption(parser: Parser) -> None:
     parser.addoption(
         "--browser",
@@ -30,6 +31,10 @@ def browser(request: FixtureRequest) -> None:
             options = webdriver.EdgeOptions()
             options.add_argument("--inprivate")  # Режим инкогнито
             options.add_argument("--user-data-dir=C:/temp/edge_profile")  # Новый профиль
+            options.add_experimental_option("prefs", {
+                "credentials_enable_service": False,  # Отключает сервис сохранения паролей
+                "profile.password_manager_enabled": False  # Отключает встроенный менеджер паролей
+            })
             driver = webdriver.Edge(service=EdgeService(EdgeChromiumDriverManager().install()), options=options)
         elif browser_name == "chrome":
             driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
